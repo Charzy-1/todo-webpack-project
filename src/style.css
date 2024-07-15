@@ -1,0 +1,93 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.todo-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 50vw;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+ 
+  padding: 20px;
+}
+
+#task-form {
+  display: flex;
+}
+
+#task-input {
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-style: italic;
+  font-size: 20px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: 1px solid #ccc;
+  cursor: move;
+}
+
+.task-item input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.task-item span {
+  flex: 1;
+}
+
+.task-item.completed span {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.task-item .menu {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.task-item .menu .fa-trash {
+  display: none;
+  color: black;
+  margin-left: 10px;
+}
+
+.task-item .menu .fa-ellipsis-v {
+  display: inline;
+}
+
+.task-item.show-bin .menu .fa-ellipsis-v {
+  display: none;
+}
+
+.task-item.show-bin .menu .fa-trash {
+  display: inline;
+}
+
+#clear-completed {
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .todo-container {
+    width: 80vw;
+  }
+}
