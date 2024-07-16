@@ -26,7 +26,7 @@ const renderTasks = () => {
     taskItem.setAttribute('data-index', i);
     taskItem.innerHTML = `
       <input type="checkbox" ${task.completed ? 'checked' : ''} data-index="${i}">
-      <span>${task.description}</span>
+      <span contenteditable="false">${task.description}</span>
       <div class="menu">
         <i class="fa-solid fa-ellipsis-v" data-index="${i}"></i>
         <i class="fa-solid fa-trash" data-index="${i}"></i>
@@ -51,6 +51,20 @@ const renderTasks = () => {
     const menuButton = taskItem.querySelector('.fa-ellipsis-v');
     menuButton.addEventListener('click', () => {
       taskItem.classList.toggle('show-bin');
+      const span = taskItem.querySelector('span');
+      span.contentEditable = taskItem.classList.contains('show-bin');
+      if (span.contentEditable === "true") {
+        span.focus();
+      }
+    });
+
+    const span = taskItem.querySelector('span');
+    span.addEventListener('keydown', (event) => {
+      if (event.key === 'Backspace' && span.innerText.trim() === '') {
+        tasks = tasks.filter((_, idx) => idx !== i);
+        saveTasks();
+        renderTasks();
+      }
     });
 
     taskItem.addEventListener('dragstart', (e) => {

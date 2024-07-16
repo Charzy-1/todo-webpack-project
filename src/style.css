@@ -19,7 +19,6 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
- 
   padding: 20px;
 }
 
@@ -45,12 +44,18 @@ body {
   cursor: move;
 }
 
+.task-item:hover {
+  background-color: rgb(228, 228, 128);
+}
+
 .task-item input[type="checkbox"] {
   margin-right: 10px;
 }
 
 .task-item span {
   flex: 1;
+  border: none; /* Ensure no border */
+  outline: none; /* Remove outline when focused */
 }
 
 .task-item.completed span {
@@ -84,6 +89,7 @@ body {
 
 #clear-completed {
   padding: 20px;
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {
