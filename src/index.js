@@ -1,9 +1,9 @@
 // import './style.css';
 
 const todos = [
-  { description: 'Wash the dishes', completed: false, index: 3 },
-  { description: 'Complete To Do list project', completed: true, index: 2 },
-  { description: 'Write code', completed: false, index: 1 }
+  { description: 'Buy groceries', completed: false, index: 3 },
+  { description: 'Read a book', completed: true, index: 2 },
+  { description: 'Write code', completed: false, index: 1 },
 ];
 
 function populateTodoList(todoArray, listElement) {
@@ -13,10 +13,13 @@ function populateTodoList(todoArray, listElement) {
   // Clear any existing items in the list
   listElement.innerHTML = '';
 
-  for (let i = 0; i < todoArray.length; i++) {
+  for (let i = 0; i < todoArray.length; i += 1) {
     const todo = todoArray[i];
     const listItem = document.createElement('li');
     listItem.textContent = `${todo.description} - ${todo.completed ? 'Done' : 'Not done'}`;
+    if (todo.completed) {
+      listItem.classList.add('done');
+    }
     listElement.appendChild(listItem);
   }
 }
@@ -25,6 +28,3 @@ document.addEventListener('DOMContentLoaded', () => {
   const todoListElement = document.getElementById('todo-list');
   populateTodoList(todos, todoListElement);
 });
-
-
-
