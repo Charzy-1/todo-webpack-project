@@ -6,6 +6,7 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
+ 
 }
 
 .todo-container {
@@ -45,7 +46,7 @@ body {
 }
 
 .task-item:hover {
-  background-color: rgb(228, 228, 128);
+  background-color: yellow;
 }
 
 .task-item input[type="checkbox"] {

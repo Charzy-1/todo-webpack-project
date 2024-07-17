@@ -1,135 +1,30 @@
 // import './style.css';
 
-let tasks = JSON.parse(localStorage.getItem('tasks')) || [
-  { description: 'Wash the dishes', completed: false, index: 1 },
-  { description: 'Complete todo list project', completed: false, index: 2 },
-  { description: 'Add project link in the resume', completed: false, index: 3 },
+const todos = [
+  { description: 'Wash the dishes', completed: false, index: 3 },
+  { description: 'Complete To Do list project', completed: true, index: 2 },
+  { description: 'Write code', completed: false, index: 1 }
 ];
 
-const saveTasks = () => {
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-};
+function populateTodoList(todoArray, listElement) {
+  // Sort the array based on the index values
+  todoArray.sort((a, b) => a.index - b.index);
 
-const renderTasks = () => {
-  const todoList = document.getElementById('todo-list');
-  todoList.innerHTML = ''; // Clear the list before rendering
+  // Clear any existing items in the list
+  listElement.innerHTML = '';
 
-  tasks.sort((a, b) => a.index - b.index);
+  for (let i = 0; i < todoArray.length; i++) {
+    const todo = todoArray[i];
+    const listItem = document.createElement('li');
+    listItem.textContent = `${todo.description} - ${todo.completed ? 'Done' : 'Not done'}`;
+    listElement.appendChild(listItem);
+  }
+}
 
-  tasks.forEach((task, i) => {
-    const taskItem = document.createElement('div');
-    taskItem.classList.add('task-item');
-    if (task.completed) {
-      taskItem.classList.add('completed');
-    }
-    taskItem.setAttribute('draggable', true);
-    taskItem.setAttribute('data-index', i);
-    taskItem.innerHTML = `
-      <input type="checkbox" ${task.completed ? 'checked' : ''} data-index="${i}">
-      <span contenteditable="false">${task.description}</span>
-      <div class="menu">
-        <i class="fa-solid fa-ellipsis-v" data-index="${i}"></i>
-        <i class="fa-solid fa-trash" data-index="${i}"></i>
-      </div>
-    `;
-    todoList.appendChild(taskItem);
-
-    const checkbox = taskItem.querySelector('input[type="checkbox"]');
-    checkbox.addEventListener('change', () => {
-      task.completed = checkbox.checked;
-      saveTasks();
-      renderTasks();
-    });
-
-    const deleteButton = taskItem.querySelector('.fa-trash');
-    deleteButton.addEventListener('click', () => {
-      tasks = tasks.filter((_, idx) => idx !== i);
-      saveTasks();
-      renderTasks();
-    });
-
-    const menuButton = taskItem.querySelector('.fa-ellipsis-v');
-    menuButton.addEventListener('click', () => {
-      taskItem.classList.toggle('show-bin');
-      const span = taskItem.querySelector('span');
-      span.contentEditable = taskItem.classList.contains('show-bin');
-      if (span.contentEditable === "true") {
-        span.focus();
-      }
-    });
-
-    const span = taskItem.querySelector('span');
-    span.addEventListener('keydown', (event) => {
-      if (event.key === 'Backspace' && span.innerText.trim() === '') {
-        tasks = tasks.filter((_, idx) => idx !== i);
-        saveTasks();
-        renderTasks();
-      }
-    });
-
-    taskItem.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData('text/plain', i);
-      taskItem.classList.add('dragging');
-    });
-
-    taskItem.addEventListener('dragend', () => {
-      taskItem.classList.remove('dragging');
-    });
-
-    taskItem.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      taskItem.classList.add('drag-over');
-    });
-
-    taskItem.addEventListener('dragleave', () => {
-      taskItem.classList.remove('drag-over');
-    });
-
-    taskItem.addEventListener('drop', (e) => {
-      e.preventDefault();
-      taskItem.classList.remove('drag-over');
-      const draggedIndex = e.dataTransfer.getData('text/plain');
-      const targetIndex = i;
-      const draggedTask = tasks.splice(draggedIndex, 1)[0];
-      tasks.splice(targetIndex, 0, draggedTask);
-      tasks.forEach((task, index) => {
-        task.index = index + 1;
-      });
-      saveTasks();
-      renderTasks();
-    });
-  });
-};
-
-const addTask = (description) => {
-  const newTask = {
-    description,
-    completed: false,
-    index: tasks.length + 1,
-  };
-  tasks.push(newTask);
-  saveTasks();
-  renderTasks();
-};
-
-const clearCompletedTasks = () => {
-  tasks = tasks.filter(task => !task.completed);
-  tasks.forEach((task, index) => {
-    task.index = index + 1;
-  });
-  saveTasks();
-  renderTasks();
-};
-
-document.getElementById('task-form').addEventListener('submit', (event) => {
-  event.preventDefault();
-  const taskInput = document.getElementById('task-input');
-  addTask(taskInput.value);
-  taskInput.value = ''; // Clear the input field
+document.addEventListener('DOMContentLoaded', () => {
+  const todoListElement = document.getElementById('todo-list');
+  populateTodoList(todos, todoListElement);
 });
 
-document.getElementById('clear-completed').addEventListener('click', clearCompletedTasks);
 
-window.onload = () => {
-  renderTasks();
-};
+
