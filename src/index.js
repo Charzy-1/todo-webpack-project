@@ -8,6 +8,13 @@ const saveTasks = () => {
   localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
+// Function to update task indexes
+const updateTaskIndexes = () => {
+  tasks.forEach((task, index) => {
+    task.index = index + 1;
+  });
+};
+
 // Function to render tasks to the HTML list
 const renderTasks = () => {
   const todoList = document.getElementById('todo-list');
@@ -103,13 +110,6 @@ const renderTasks = () => {
   });
 };
 
-// Function to update task indexes
-const updateTaskIndexes = () => {
-  tasks.forEach((task, index) => {
-    task.index = index + 1;
-  });
-};
-
 // Function to add a new task
 const addTask = (description) => {
   const newTask = {
@@ -124,7 +124,7 @@ const addTask = (description) => {
 
 // Function to clear all completed tasks
 const clearCompletedTasks = () => {
-  tasks = tasks.filter(task => !task.completed);
+  tasks = tasks.filter((task) => !task.completed);
   updateTaskIndexes(); // Update indexes after clearing completed tasks
   saveTasks();
   renderTasks();

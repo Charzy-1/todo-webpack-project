@@ -4,8 +4,6 @@ const toggleTaskStatus = (tasks, index) => {
 };
 
 // Function to clear all completed tasks
-const clearCompletedTasks = (tasks) => {
-  return tasks.filter(task => !task.completed);
-};
+const clearCompletedTasks = (tasks) => tasks.filter((task) => !task.completed);
 
 export default { toggleTaskStatus, clearCompletedTasks };
