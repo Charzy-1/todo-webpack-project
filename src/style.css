@@ -88,8 +88,12 @@ body {
 }
 
 #clear-completed {
-  padding: 20px;
+  padding: 30px;
   text-decoration: underline;
+  width: 100%;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

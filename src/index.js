@@ -1,7 +1,7 @@
 // import './style.css';
 
 // Initialize tasks from localStorage or as an empty array if not available
-const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
 // Function to save tasks to localStorage
 const saveTasks = () => {
@@ -42,16 +42,21 @@ const renderTasks = () => {
     `;
     todoList.appendChild(taskItem);
 
-    // Delete button click event to remove task
+    const checkbox = taskItem.querySelector('input[type="checkbox"]');
+    checkbox.addEventListener('change', () => {
+      task.completed = checkbox.checked;
+      saveTasks();
+      renderTasks();
+    });
+
     const deleteButton = taskItem.querySelector('.fa-trash');
     deleteButton.addEventListener('click', () => {
-      tasks.splice(i, 1); // Remove the task from the array
+      tasks = tasks.filter((_, idx) => idx !== i);
       updateTaskIndexes(); // Update indexes after deletion
       saveTasks();
       renderTasks();
     });
 
-    // Menu button click event to enable editing
     const menuButton = taskItem.querySelector('.fa-ellipsis-v');
     menuButton.addEventListener('click', () => {
       taskItem.classList.toggle('show-bin');
@@ -62,7 +67,6 @@ const renderTasks = () => {
       }
     });
 
-    // Span keydown event to save edited description
     const span = taskItem.querySelector('span');
     span.addEventListener('keydown', (event) => {
       if (event.key === 'Enter') {
@@ -74,7 +78,6 @@ const renderTasks = () => {
       }
     });
 
-    // Drag and drop events to reorder tasks
     taskItem.addEventListener('dragstart', (e) => {
       e.dataTransfer.setData('text/plain', i);
       taskItem.classList.add('dragging');
@@ -119,6 +122,14 @@ const addTask = (description) => {
   renderTasks();
 };
 
+// Function to clear all completed tasks
+const clearCompletedTasks = () => {
+  tasks = tasks.filter((task) => !task.completed);
+  updateTaskIndexes(); // Update indexes after clearing completed tasks
+  saveTasks();
+  renderTasks();
+};
+
 // Event listener for adding a new task
 document.getElementById('task-form').addEventListener('submit', (event) => {
   event.preventDefault();
@@ -128,6 +139,9 @@ document.getElementById('task-form').addEventListener('submit', (event) => {
     taskInput.value = ''; // Clear the input field
   }
 });
+
+// Event listener for clearing all completed tasks
+document.getElementById('clear-completed').addEventListener('click', clearCompletedTasks);
 
 // On page load, render tasks from localStorage
 window.onload = () => {
