@@ -1,13 +1,15 @@
-import {addItem, removeItem, addItemToDOM, removeItemFromDOM} from '../index';
+import {
+  addItem, removeItem, addItemToDOM, removeItemFromDOM,
+} from '../index';
 
 describe('Pure functions tests', () => {
   test('addItem should return a new list with the item added', () => {
     const initialList = ['Item 1'];
     const newItem = 'Item 2';
     const expectedList = ['Item 1', 'Item 2'];
-    
+
     const result = addItem(initialList, newItem);
-    
+
     expect(result).toEqual(expectedList);
   });
 
@@ -15,9 +17,9 @@ describe('Pure functions tests', () => {
     const initialList = ['Item 1', 'Item 2'];
     const itemToRemove = 'Item 1';
     const expectedList = ['Item 2'];
-    
+
     const result = removeItem(initialList, itemToRemove);
-    
+
     expect(result).toEqual(expectedList);
   });
 });
@@ -31,7 +33,7 @@ describe('DOM manipulation tests', () => {
   test('addItemToDOM should add a new <li> element to the list', () => {
     addItemToDOM('New Item');
     const listItems = document.querySelectorAll('#itemList li');
-    
+
     expect(listItems.length).toBe(1);
     expect(listItems[0].textContent).toBe('New Item');
   });
@@ -43,7 +45,7 @@ describe('DOM manipulation tests', () => {
 
     removeItemFromDOM('Item to Remove');
     const listItems = document.querySelectorAll('#itemList li');
-    
+
     expect(listItems.length).toBe(0);
   });
 });
