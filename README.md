@@ -59,7 +59,7 @@
 <!-- live demo -->
 ## 🚀 Live Demo <a name="live-demo"></a>
 
-- [Live Demo Link](#)
+- [Live Demo Link](https://charzy-1.github.io/todo-webpack-project/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
