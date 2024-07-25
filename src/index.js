@@ -1,4 +1,4 @@
-// import './style.css';
+import './style.css';
 
 // Initialize tasks from localStorage or as an empty array if not available
 let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
