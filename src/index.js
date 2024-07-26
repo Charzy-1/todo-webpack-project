@@ -132,7 +132,7 @@ const clearCompletedTasks = () => {
 
 // Pure functions for testing
 const addItem = (list, item) => [...list, item];
-const removeItem = (list, item) => list.filter(i => i !== item);
+const removeItem = (list, item) => list.filter((i) => i !== item);
 
 // DOM manipulation functions for testing
 const addItemToDOM = (item) => {
@@ -145,7 +145,7 @@ const addItemToDOM = (item) => {
 const removeItemFromDOM = (item) => {
   const ul = document.getElementById('itemList');
   const items = ul.getElementsByTagName('li');
-  for (let i = 0; i < items.length; i++) {
+  for (let i = 0; i < items.length; i += 1) {
     if (items[i].textContent === item) {
       ul.removeChild(items[i]);
       break;
@@ -160,7 +160,7 @@ export {
   addItem,
   removeItem,
   addItemToDOM,
-  removeItemFromDOM
+  removeItemFromDOM,
 };
 
 document.addEventListener('DOMContentLoaded', () => {

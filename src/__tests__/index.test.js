@@ -2,7 +2,7 @@ import {
   addItem,
   removeItem,
   addItemToDOM,
-  removeItemFromDOM
+  removeItemFromDOM,
 } from '../index'; // Adjusted import path
 
 describe('Pure functions tests', () => {
