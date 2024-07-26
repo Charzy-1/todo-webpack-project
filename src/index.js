@@ -130,20 +130,53 @@ const clearCompletedTasks = () => {
   renderTasks();
 };
 
-// Event listener for adding a new task
-document.getElementById('task-form').addEventListener('submit', (event) => {
-  event.preventDefault();
-  const taskInput = document.getElementById('task-input');
-  if (taskInput.value.trim() !== '') {
-    addTask(taskInput.value);
-    taskInput.value = ''; // Clear the input field
-  }
-});
+// Pure functions for testing
+const addItem = (list, item) => [...list, item];
+const removeItem = (list, item) => list.filter(i => i !== item);
 
-// Event listener for clearing all completed tasks
-document.getElementById('clear-completed').addEventListener('click', clearCompletedTasks);
-
-// On page load, render tasks from localStorage
-window.onload = () => {
-  renderTasks();
+// DOM manipulation functions for testing
+const addItemToDOM = (item) => {
+  const ul = document.getElementById('itemList');
+  const li = document.createElement('li');
+  li.textContent = item;
+  ul.appendChild(li);
 };
+
+const removeItemFromDOM = (item) => {
+  const ul = document.getElementById('itemList');
+  const items = ul.getElementsByTagName('li');
+  for (let i = 0; i < items.length; i++) {
+    if (items[i].textContent === item) {
+      ul.removeChild(items[i]);
+      break;
+    }
+  }
+};
+
+// Export the functions
+export {
+  addTask,
+  clearCompletedTasks,
+  addItem,
+  removeItem,
+  addItemToDOM,
+  removeItemFromDOM
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Event listener for adding a new task
+  document.getElementById('task-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const taskInput = document.getElementById('task-input');
+    if (taskInput.value.trim() !== '') {
+      addTask(taskInput.value);
+      taskInput.value = ''; // Clear the input field
+    }
+  });
+
+  // Event listener for clearing all completed tasks
+  document.getElementById('clear-completed').addEventListener('click', clearCompletedTasks);
+
+  // On page load, render tasks from localStorage
+  renderTasks();
+});
