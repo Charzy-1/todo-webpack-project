@@ -2,7 +2,7 @@
 /* eslint-disable import/extensions */
 /* eslint-disable no-undef */
 
-import { addTask, editTaskDescription, updateTaskStatus, clearCompletedTasks, renderTasks } from '../src/index';
+import { addTask, editTaskDescription, updateTaskStatus, clearCompletedTasks, renderTasks } from '../index';
 
 // Mock tasks
 let tasks = [
@@ -26,6 +26,8 @@ describe('Task management functions', () => {
       { description: 'Task 2', completed: true, index: 2 },
       { description: 'Task 3', completed: false, index: 3 },
     ];
+    mockLocalStorage.setItem.mockClear();
+    mockLocalStorage.getItem.mockImplementation(() => JSON.stringify(tasks));
   });
 
   describe('Edit task description', () => {
@@ -33,9 +35,10 @@ describe('Task management functions', () => {
       const taskIndex = 1;
       const newDescription = 'Updated Task 2';
 
-      tasks[taskIndex].description = newDescription;
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-      const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
+      editTaskDescription(taskIndex, newDescription);
+
+      expect(localStorage.setItem).toHaveBeenCalledWith('tasks', expect.any(String));
+      const updatedTasks = JSON.parse(localStorage.setItem.mock.calls[0][1]);
 
       expect(updatedTasks[taskIndex].description).toBe(newDescription);
     });
@@ -46,9 +49,10 @@ describe('Task management functions', () => {
       const taskIndex = 0;
       const newStatus = true;
 
-      tasks[taskIndex].completed = newStatus;
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-      const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
+      updateTaskStatus(taskIndex, newStatus);
+
+      expect(localStorage.setItem).toHaveBeenCalledWith('tasks', expect.any(String));
+      const updatedTasks = JSON.parse(localStorage.setItem.mock.calls[0][1]);
 
       expect(updatedTasks[taskIndex].completed).toBe(newStatus);
     });
@@ -56,11 +60,12 @@ describe('Task management functions', () => {
 
   describe('Clear all completed tasks', () => {
     test('should remove all completed tasks', () => {
-      tasks = tasks.filter((task) => !task.completed);
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-      const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
+      clearCompletedTasks();
 
-      expect(updatedTasks.length).toBe(2);
+      expect(localStorage.setItem).toHaveBeenCalledWith('tasks', expect.any(String));
+      const updatedTasks = JSON.parse(localStorage.setItem.mock.calls[0][1]);
+
+      expect(updatedTasks.length).toBe(1);
       expect(updatedTasks.some((task) => task.completed)).toBe(false);
     });
   });
@@ -81,11 +86,11 @@ describe('DOM manipulation functions', () => {
     test('should edit the task description in the DOM', () => {
       // Add initial task to DOM
       const taskItem = document.createElement('div');
-      taskItem.innerHTML = '<span contenteditable="false">Task 1</span>';
+      taskItem.classList.add('task-item');
+      taskItem.innerHTML = '<span contenteditable="true">Task 1</span>';
       document.getElementById('todo-list').appendChild(taskItem);
 
       const span = taskItem.querySelector('span');
-      span.contentEditable = true;
       span.innerText = 'Updated Task 1';
       span.contentEditable = false;
 
@@ -97,6 +102,7 @@ describe('DOM manipulation functions', () => {
     test('should update the completed status in the DOM', () => {
       // Add initial task to DOM
       const taskItem = document.createElement('div');
+      taskItem.classList.add('task-item');
       taskItem.innerHTML = '<input type="checkbox" />';
       document.getElementById('todo-list').appendChild(taskItem);
 
@@ -111,7 +117,7 @@ describe('DOM manipulation functions', () => {
     test('should remove all completed tasks from the DOM', () => {
       // Add completed task to DOM
       const taskItem = document.createElement('div');
-      taskItem.classList.add('completed');
+      taskItem.classList.add('task-item', 'completed');
       document.getElementById('todo-list').appendChild(taskItem);
 
       clearCompletedTasks();

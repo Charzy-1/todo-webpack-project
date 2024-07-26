@@ -1,3 +1,5 @@
+// src/index.js
+
 import './style.css';
 
 // Initialize tasks from localStorage or as an empty array if not available
@@ -122,6 +124,20 @@ const addTask = (description) => {
   renderTasks();
 };
 
+// Function to edit a task's description
+const editTaskDescription = (index, newDescription) => {
+  tasks[index].description = newDescription;
+  saveTasks();
+  renderTasks();
+};
+
+// Function to update a task's completed status
+const updateTaskStatus = (index, status) => {
+  tasks[index].completed = status;
+  saveTasks();
+  renderTasks();
+};
+
 // Function to clear all completed tasks
 const clearCompletedTasks = () => {
   tasks = tasks.filter((task) => !task.completed);
@@ -130,91 +146,11 @@ const clearCompletedTasks = () => {
   renderTasks();
 };
 
-<<<<<<< HEAD
-// Function to edit the task description
-const editTaskDescription = (index, newDescription) => {
-  if (tasks[index]) {
-    tasks[index].description = newDescription;
-    saveTasks();
-    renderTasks();
-  }
-};
-
-// Function to update a task's completed status
-const updateTaskStatus = (index, status) => {
-  if (tasks[index]) {
-    tasks[index].completed = status;
-    saveTasks();
-    renderTasks();
-  }
-};
-
-// Pure functions for testing
-const addItem = (list, item) => [...list, item];
-const removeItem = (list, item) => list.filter((i) => i !== item);
-
-// DOM manipulation functions for testing
-const addItemToDOM = (item) => {
-  const ul = document.getElementById('itemList');
-  const li = document.createElement('li');
-  li.textContent = item;
-  ul.appendChild(li);
-};
-
-=======
-// Pure functions for testing
-const addItem = (list, item) => [...list, item];
-const removeItem = (list, item) => list.filter((i) => i !== item);
-
-// DOM manipulation functions for testing
-const addItemToDOM = (item) => {
-  const ul = document.getElementById('itemList');
-  const li = document.createElement('li');
-  li.textContent = item;
-  ul.appendChild(li);
-};
-
->>>>>>> main
-const removeItemFromDOM = (item) => {
-  const ul = document.getElementById('itemList');
-  const items = ul.getElementsByTagName('li');
-  for (let i = 0; i < items.length; i += 1) {
-    if (items[i].textContent === item) {
-      ul.removeChild(items[i]);
-      break;
-    }
-  }
-};
-
 // Export the functions
 export {
   addTask,
-  clearCompletedTasks,
-<<<<<<< HEAD
   editTaskDescription,
   updateTaskStatus,
-=======
->>>>>>> main
-  addItem,
-  removeItem,
-  addItemToDOM,
-  removeItemFromDOM,
+  clearCompletedTasks,
+  renderTasks,
 };
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Event listener for adding a new task
-  document.getElementById('task-form').addEventListener('submit', (event) => {
-    event.preventDefault();
-    const taskInput = document.getElementById('task-input');
-    if (taskInput.value.trim() !== '') {
-      addTask(taskInput.value);
-      taskInput.value = ''; // Clear the input field
-    }
-  });
-
-  // Event listener for clearing all completed tasks
-  document.getElementById('clear-completed').addEventListener('click', clearCompletedTasks);
-
-  // On page load, render tasks from localStorage
-  renderTasks();
-});
