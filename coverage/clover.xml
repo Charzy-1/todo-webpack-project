@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1721995825586" clover="3.2.0">
-  <project timestamp="1721995825586" name="All files">
+<coverage generated="1721997041676" clover="3.2.0">
+  <project timestamp="1721997041677" name="All files">
     <metrics statements="98" coveredstatements="21" conditionals="14" coveredconditionals="3" methods="26" coveredmethods="5" elements="138" coveredelements="29" complexity="0" loc="98" ncloc="98" packages="1" files="1" classes="1"/>
     <file name="index.js" path="C:\Users\omo\Desktop\todo-webpack-project\src\index.js">
       <metrics statements="98" coveredstatements="21" conditionals="14" coveredconditionals="3" methods="26" coveredmethods="5"/>
