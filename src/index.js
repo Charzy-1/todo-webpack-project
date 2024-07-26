@@ -130,6 +130,7 @@ const clearCompletedTasks = () => {
   renderTasks();
 };
 
+<<<<<<< HEAD
 // Function to edit the task description
 const editTaskDescription = (index, newDescription) => {
   if (tasks[index]) {
@@ -160,6 +161,20 @@ const addItemToDOM = (item) => {
   ul.appendChild(li);
 };
 
+=======
+// Pure functions for testing
+const addItem = (list, item) => [...list, item];
+const removeItem = (list, item) => list.filter((i) => i !== item);
+
+// DOM manipulation functions for testing
+const addItemToDOM = (item) => {
+  const ul = document.getElementById('itemList');
+  const li = document.createElement('li');
+  li.textContent = item;
+  ul.appendChild(li);
+};
+
+>>>>>>> main
 const removeItemFromDOM = (item) => {
   const ul = document.getElementById('itemList');
   const items = ul.getElementsByTagName('li');
@@ -175,8 +190,11 @@ const removeItemFromDOM = (item) => {
 export {
   addTask,
   clearCompletedTasks,
+<<<<<<< HEAD
   editTaskDescription,
   updateTaskStatus,
+=======
+>>>>>>> main
   addItem,
   removeItem,
   addItemToDOM,
