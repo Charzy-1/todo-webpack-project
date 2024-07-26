@@ -2,25 +2,30 @@
 /* eslint-disable import/extensions */
 /* eslint-disable no-undef */
 
-import { editTaskDescription, updateTaskStatus, clearCompletedTasks } from '../index';
+import { addTask, editTaskDescription, updateTaskStatus, clearCompletedTasks, renderTasks } from '../src/index';
+
+// Mock tasks
+let tasks = [
+  { description: 'Task 1', completed: false, index: 1 },
+  { description: 'Task 2', completed: true, index: 2 },
+  { description: 'Task 3', completed: false, index: 3 },
+];
+
+// Mock localStorage
+const mockLocalStorage = {
+  getItem: jest.fn(() => JSON.stringify(tasks)),
+  setItem: jest.fn(),
+};
+
+global.localStorage = mockLocalStorage;
 
 describe('Task management functions', () => {
-  let tasks;
-  let mockLocalStorage;
-
   beforeEach(() => {
     tasks = [
       { description: 'Task 1', completed: false, index: 1 },
       { description: 'Task 2', completed: true, index: 2 },
       { description: 'Task 3', completed: false, index: 3 },
     ];
-
-    mockLocalStorage = {
-      getItem: jest.fn(() => JSON.stringify(tasks)),
-      setItem: jest.fn(),
-    };
-
-    global.localStorage = mockLocalStorage;
   });
 
   describe('Edit task description', () => {
@@ -76,11 +81,11 @@ describe('DOM manipulation functions', () => {
     test('should edit the task description in the DOM', () => {
       // Add initial task to DOM
       const taskItem = document.createElement('div');
-      taskItem.innerHTML = '<span contenteditable="false">Task 1</span>';
+      taskItem.classList.add('task-item');
+      taskItem.innerHTML = '<span contenteditable="true">Task 1</span>';
       document.getElementById('todo-list').appendChild(taskItem);
 
       const span = taskItem.querySelector('span');
-      span.contentEditable = true;
       span.innerText = 'Updated Task 1';
       span.contentEditable = false;
 
@@ -92,6 +97,7 @@ describe('DOM manipulation functions', () => {
     test('should update the completed status in the DOM', () => {
       // Add initial task to DOM
       const taskItem = document.createElement('div');
+      taskItem.classList.add('task-item');
       taskItem.innerHTML = '<input type="checkbox" />';
       document.getElementById('todo-list').appendChild(taskItem);
 
@@ -106,15 +112,13 @@ describe('DOM manipulation functions', () => {
     test('should remove all completed tasks from the DOM', () => {
       // Add completed task to DOM
       const taskItem = document.createElement('div');
-      taskItem.classList.add('completed');
+      taskItem.classList.add('task-item', 'completed');
       document.getElementById('todo-list').appendChild(taskItem);
 
-      tasks = tasks.filter((task) => !task.completed);
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-      const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
+      clearCompletedTasks();
+      renderTasks();
 
-      expect(updatedTasks.length).toBe(2);
-      expect(updatedTasks.some((task) => task.completed)).toBe(false);
+      expect(document.querySelector('.completed')).toBe(null);
     });
   });
 });
