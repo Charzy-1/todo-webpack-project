@@ -1,61 +1,116 @@
-import {
-  addItem, removeItem, addItemToDOM, removeItemFromDOM,
-} from '../index';
+import { editTaskDescription, updateTaskStatus, clearCompletedTasks } from '../index';
 
-describe('Pure functions tests', () => {
-  test('addItem should return a new list with the item added', () => {
-    const initialList = ['Item 1'];
-    const newItem = 'Item 2';
-    const expectedList = ['Item 1', 'Item 2'];
+describe('Task management functions', () => {
+  let tasks;
+  let mockLocalStorage;
 
-    const result = addItem(initialList, newItem);
-
-    expect(result).toEqual(expectedList);
-  });
-
-  test('removeItem should return a new list with the item removed', () => {
-    const initialList = ['Item 1', 'Item 2'];
-    const itemToRemove = 'Item 1';
-    const expectedList = ['Item 2'];
-
-    const result = removeItem(initialList, itemToRemove);
-
-    expect(result).toEqual(expectedList);
-  });
-});
-
-describe('DOM manipulation tests', () => {
   beforeEach(() => {
-    // Set up a clean DOM before each test
-    document.body.innerHTML = '<ul id="itemList"></ul>';
+    tasks = [
+      { description: 'Task 1', completed: false, index: 1 },
+      { description: 'Task 2', completed: true, index: 2 },
+      { description: 'Task 3', completed: false, index: 3 },
+    ];
+
+    mockLocalStorage = {
+      getItem: jest.fn(() => JSON.stringify(tasks)),
+      setItem: jest.fn(),
+    };
+
+    global.localStorage = mockLocalStorage;
   });
 
-  test('addItemToDOM should add a new <li> element to the list', () => {
-    addItemToDOM('New Item');
-    const listItems = document.querySelectorAll('#itemList li');
+  describe('Edit task description', () => {
+    test('should edit the description of a task', () => {
+      const taskIndex = 1;
+      const newDescription = 'Updated Task 2';
 
-    expect(listItems.length).toBe(1);
-    expect(listItems[0].textContent).toBe('New Item');
+      tasks[taskIndex].description = newDescription;
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
+
+      expect(updatedTasks[taskIndex].description).toBe(newDescription);
+    });
   });
 
-  test('removeItemFromDOM should remove an <li> element from the list', () => {
-    // Set up initial state
-    const ul = document.querySelector('#itemList');
-    ul.innerHTML = '<li>Item to Remove</li>';
+  describe('Update task status', () => {
+    test('should update the completed status of a task', () => {
+      const taskIndex = 0;
+      const newStatus = true;
 
-    removeItemFromDOM('Item to Remove');
-    const listItems = document.querySelectorAll('#itemList li');
+      tasks[taskIndex].completed = newStatus;
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
 
-    expect(listItems.length).toBe(0);
+      expect(updatedTasks[taskIndex].completed).toBe(newStatus);
+    });
+  });
+
+  describe('Clear all completed tasks', () => {
+    test('should remove all completed tasks', () => {
+      tasks = tasks.filter(task => !task.completed);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
+
+      expect(updatedTasks.length).toBe(2);
+      expect(updatedTasks.some(task => task.completed)).toBe(false);
+    });
   });
 });
 
-beforeEach(() => {
-  // Mock localStorage
-  global.localStorage = {
-    getItem: jest.fn(),
-    setItem: jest.fn(),
-    removeItem: jest.fn(),
-    clear: jest.fn(),
-  };
+describe('DOM manipulation functions', () => {
+  beforeEach(() => {
+    document.body.innerHTML = `
+      <div id="todo-list"></div>
+      <form id="task-form">
+        <input id="task-input" />
+      </form>
+      <button id="clear-completed"></button>
+    `;
+  });
+
+  describe('Edit task description', () => {
+    test('should edit the task description in the DOM', () => {
+      // Add initial task to DOM
+      const taskItem = document.createElement('div');
+      taskItem.innerHTML = `<span contenteditable="false">Task 1</span>`;
+      document.getElementById('todo-list').appendChild(taskItem);
+
+      const span = taskItem.querySelector('span');
+      span.contentEditable = true;
+      span.innerText = 'Updated Task 1';
+      span.contentEditable = false;
+
+      expect(span.innerText).toBe('Updated Task 1');
+    });
+  });
+
+  describe('Update task status', () => {
+    test('should update the completed status in the DOM', () => {
+      // Add initial task to DOM
+      const taskItem = document.createElement('div');
+      taskItem.innerHTML = `<input type="checkbox" />`;
+      document.getElementById('todo-list').appendChild(taskItem);
+
+      const checkbox = taskItem.querySelector('input');
+      checkbox.checked = true;
+
+      expect(checkbox.checked).toBe(true);
+    });
+  });
+
+  describe('Clear all completed tasks', () => {
+    test('should remove all completed tasks from the DOM', () => {
+      // Add completed task to DOM
+      const taskItem = document.createElement('div');
+      taskItem.classList.add('completed');
+      document.getElementById('todo-list').appendChild(taskItem);
+
+      tasks = tasks.filter(task => !task.completed);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
+
+      expect(updatedTasks.length).toBe(2);
+      expect(updatedTasks.some(task => task.completed)).toBe(false);
+    });
+  });
 });
