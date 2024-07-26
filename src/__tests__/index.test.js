@@ -1,3 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable import/extensions */
+/* eslint-disable no-undef */
+
 import { editTaskDescription, updateTaskStatus, clearCompletedTasks } from '../index';
 
 describe('Task management functions', () => {
@@ -47,12 +51,12 @@ describe('Task management functions', () => {
 
   describe('Clear all completed tasks', () => {
     test('should remove all completed tasks', () => {
-      tasks = tasks.filter(task => !task.completed);
+      tasks = tasks.filter((task) => !task.completed);
       localStorage.setItem('tasks', JSON.stringify(tasks));
       const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
 
       expect(updatedTasks.length).toBe(2);
-      expect(updatedTasks.some(task => task.completed)).toBe(false);
+      expect(updatedTasks.some((task) => task.completed)).toBe(false);
     });
   });
 });
@@ -72,7 +76,7 @@ describe('DOM manipulation functions', () => {
     test('should edit the task description in the DOM', () => {
       // Add initial task to DOM
       const taskItem = document.createElement('div');
-      taskItem.innerHTML = `<span contenteditable="false">Task 1</span>`;
+      taskItem.innerHTML = '<span contenteditable="false">Task 1</span>';
       document.getElementById('todo-list').appendChild(taskItem);
 
       const span = taskItem.querySelector('span');
@@ -88,7 +92,7 @@ describe('DOM manipulation functions', () => {
     test('should update the completed status in the DOM', () => {
       // Add initial task to DOM
       const taskItem = document.createElement('div');
-      taskItem.innerHTML = `<input type="checkbox" />`;
+      taskItem.innerHTML = '<input type="checkbox" />';
       document.getElementById('todo-list').appendChild(taskItem);
 
       const checkbox = taskItem.querySelector('input');
@@ -105,12 +109,12 @@ describe('DOM manipulation functions', () => {
       taskItem.classList.add('completed');
       document.getElementById('todo-list').appendChild(taskItem);
 
-      tasks = tasks.filter(task => !task.completed);
+      tasks = tasks.filter((task) => !task.completed);
       localStorage.setItem('tasks', JSON.stringify(tasks));
       const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
 
       expect(updatedTasks.length).toBe(2);
-      expect(updatedTasks.some(task => task.completed)).toBe(false);
+      expect(updatedTasks.some((task) => task.completed)).toBe(false);
     });
   });
 });
