@@ -18,6 +18,8 @@ const updateTaskIndexes = () => {
 // Function to render tasks to the HTML list
 const renderTasks = () => {
   const todoList = document.getElementById('todo-list');
+  if (!todoList) return;
+
   todoList.innerHTML = ''; // Clear the list before rendering
 
   // Sort tasks by index
@@ -122,6 +124,24 @@ const addTask = (description) => {
   renderTasks();
 };
 
+// Function to edit a task's description
+const editTaskDescription = (index, newDescription) => {
+  if (tasks[index]) {
+    tasks[index].description = newDescription;
+    saveTasks();
+    renderTasks();
+  }
+};
+
+// Function to update a task's completed status
+const updateTaskStatus = (index, status) => {
+  if (tasks[index]) {
+    tasks[index].completed = status;
+    saveTasks();
+    renderTasks();
+  }
+};
+
 // Function to clear all completed tasks
 const clearCompletedTasks = () => {
   tasks = tasks.filter((task) => !task.completed);
@@ -130,53 +150,26 @@ const clearCompletedTasks = () => {
   renderTasks();
 };
 
-// Pure functions for testing
-const addItem = (list, item) => [...list, item];
-const removeItem = (list, item) => list.filter((i) => i !== item);
-
-// DOM manipulation functions for testing
-const addItemToDOM = (item) => {
-  const ul = document.getElementById('itemList');
-  const li = document.createElement('li');
-  li.textContent = item;
-  ul.appendChild(li);
-};
-
-const removeItemFromDOM = (item) => {
-  const ul = document.getElementById('itemList');
-  const items = ul.getElementsByTagName('li');
-  for (let i = 0; i < items.length; i += 1) {
-    if (items[i].textContent === item) {
-      ul.removeChild(items[i]);
-      break;
-    }
-  }
-};
-
-// Export the functions
+// Export functions for testing
 export {
-  addTask,
-  clearCompletedTasks,
-  addItem,
-  removeItem,
-  addItemToDOM,
-  removeItemFromDOM,
+  addTask, editTaskDescription, updateTaskStatus, clearCompletedTasks, renderTasks,
 };
 
+// Initial render of tasks
 document.addEventListener('DOMContentLoaded', () => {
-  // Event listener for adding a new task
-  document.getElementById('task-form').addEventListener('submit', (event) => {
+  renderTasks();
+
+  const taskForm = document.getElementById('task-form');
+  taskForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const taskInput = document.getElementById('task-input');
-    if (taskInput.value.trim() !== '') {
-      addTask(taskInput.value);
-      taskInput.value = ''; // Clear the input field
+    const description = taskInput.value.trim();
+    if (description) {
+      addTask(description);
+      taskInput.value = '';
     }
   });
 
-  // Event listener for clearing all completed tasks
-  document.getElementById('clear-completed').addEventListener('click', clearCompletedTasks);
-
-  // On page load, render tasks from localStorage
-  renderTasks();
+  const clearCompletedButton = document.getElementById('clear-completed');
+  clearCompletedButton.addEventListener('click', clearCompletedTasks);
 });
