@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1722067118882" clover="3.2.0">
-  <project timestamp="1722067118882" name="All files">
-    <metrics statements="98" coveredstatements="22" conditionals="18" coveredconditionals="6" methods="23" coveredmethods="6" elements="139" coveredelements="34" complexity="0" loc="98" ncloc="98" packages="1" files="1" classes="1"/>
+<coverage generated="1722069052921" clover="3.2.0">
+  <project timestamp="1722069052921" name="All files">
+    <metrics statements="98" coveredstatements="19" conditionals="18" coveredconditionals="5" methods="23" coveredmethods="6" elements="139" coveredelements="30" complexity="0" loc="98" ncloc="98" packages="1" files="1" classes="1"/>
     <file name="index.js" path="C:\Users\omo\Desktop\todo-webpack-project\src\index.js">
-      <metrics statements="98" coveredstatements="22" conditionals="18" coveredconditionals="6" methods="23" coveredmethods="6"/>
+      <metrics statements="98" coveredstatements="19" conditionals="18" coveredconditionals="5" methods="23" coveredmethods="6"/>
       <line num="4" count="1" type="cond" truecount="2" falsecount="0"/>
       <line num="7" count="1" type="stmt"/>
-      <line num="8" count="2" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
       <line num="12" count="1" type="stmt"/>
-      <line num="13" count="2" type="stmt"/>
+      <line num="13" count="1" type="stmt"/>
       <line num="14" count="0" type="stmt"/>
       <line num="19" count="1" type="stmt"/>
-      <line num="20" count="3" type="stmt"/>
-      <line num="21" count="3" type="cond" truecount="2" falsecount="0"/>
-      <line num="23" count="2" type="stmt"/>
-      <line num="26" count="2" type="stmt"/>
-      <line num="29" count="2" type="stmt"/>
+      <line num="20" count="1" type="stmt"/>
+      <line num="21" count="1" type="cond" truecount="1" falsecount="1"/>
+      <line num="23" count="0" type="stmt"/>
+      <line num="26" count="0" type="stmt"/>
+      <line num="29" count="0" type="stmt"/>
       <line num="30" count="0" type="stmt"/>
       <line num="31" count="0" type="stmt"/>
       <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
@@ -86,10 +86,10 @@
       <line num="140" count="0" type="stmt"/>
       <line num="141" count="0" type="stmt"/>
       <line num="146" count="1" type="stmt"/>
-      <line num="147" count="2" type="stmt"/>
-      <line num="148" count="2" type="stmt"/>
-      <line num="149" count="2" type="stmt"/>
-      <line num="150" count="2" type="stmt"/>
+      <line num="147" count="1" type="stmt"/>
+      <line num="148" count="1" type="stmt"/>
+      <line num="149" count="1" type="stmt"/>
+      <line num="150" count="1" type="stmt"/>
       <line num="157" count="1" type="stmt"/>
       <line num="158" count="0" type="stmt"/>
       <line num="160" count="0" type="stmt"/>

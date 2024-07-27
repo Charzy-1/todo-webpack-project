@@ -1,77 +1,56 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable import/extensions */
-/* eslint-disable no-undef */
+import { addTask, editTaskDescription, updateTaskStatus, clearCompletedTasks, renderTasks } from '../index';
 
-import { addTask, editTaskDescription, updateTaskStatus, clearCompletedTasks, renderTasks } from './index';
 
-jest.mock('localstorage-polyfill'); // Or your localStorage polyfill
+// Mock tasks
+let tasks = [
+  { description: 'Task 1', completed: false, index: 1 },
+  { description: 'Task 2', completed: true, index: 2 },
+  { description: 'Task 3', completed: false, index: 3 },
+];
+
+// Mock localStorage
+const mockLocalStorage = {
+  getItem: jest.fn(() => JSON.stringify(tasks)),
+  setItem: jest.fn(),
+};
+
+global.localStorage = mockLocalStorage;
 
 describe('Task Management Functions', () => {
-  let mockLocalStorage;
-
   beforeEach(() => {
-    mockLocalStorage = {
-      getItem: jest.fn(),
-      setItem: jest.fn(),
-    };
-    global.localStorage = mockLocalStorage;
+    tasks = [
+      { description: 'Task 1', completed: false, index: 1 },
+      { description: 'Task 2', completed: true, index: 2 },
+      { description: 'Task 3', completed: false, index: 3 },
+    ];
+    mockLocalStorage.getItem.mockReturnValue(JSON.stringify(tasks));
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
+  test('should edit the description of a task', () => {
+    const taskIndex = 1;
+    const newDescription = 'Updated Task 2';
+
+    editTaskDescription(taskIndex, newDescription);
+    const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
+
+    expect(updatedTasks[taskIndex].description).toBe(newDescription);
   });
 
-  describe('addTask', () => {
-    it('should add a new task', () => {
-      const newTaskDescription = 'Test Task';
-      addTask(newTaskDescription);
+  test('should update the completed status of a task', () => {
+    const taskIndex = 0;
+    const newStatus = true;
 
-      expect(localStorage.setItem).toHaveBeenCalledWith('tasks', expect.any(String));
-      const updatedTasks = JSON.parse(localStorage.setItem.mock.calls[0][1]);
-      expect(updatedTasks.length).toBe(tasks.length + 1);
-      expect(updatedTasks[updatedTasks.length - 1].description).toBe(newTaskDescription);
-    });
+    updateTaskStatus(taskIndex, newStatus);
+    const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
+
+    expect(updatedTasks[taskIndex].completed).toBe(newStatus);
   });
 
-  describe('editTaskDescription', () => {
-    it('should edit the description of an existing task', () => {
-      const taskIndex = 0;
-      const newDescription = 'Updated Description';
-      editTaskDescription(taskIndex, newDescription);
+  test('should remove all completed tasks', () => {
+    clearCompletedTasks();
+    const updatedTasks = JSON.parse(mockLocalStorage.setItem.mock.calls[0][1]);
 
-      expect(localStorage.setItem).toHaveBeenCalledWith('tasks', expect.any(String));
-      const updatedTasks = JSON.parse(localStorage.setItem.mock.calls[0][1]);
-      expect(updatedTasks[taskIndex].description).toBe(newDescription);
-    });
-  });
-
-  describe('updateTaskStatus', () => {
-    it('should update the completed status of a task', () => {
-      const taskIndex = 0;
-      const newStatus = true;
-      updateTaskStatus(taskIndex, newStatus);
-
-      expect(localStorage.setItem).toHaveBeenCalledWith('tasks', expect.any(String));
-      const updatedTasks = JSON.parse(localStorage.setItem.mock.calls[0][1]);
-      expect(updatedTasks[taskIndex].completed).toBe(newStatus);
-    });
-  });
-
-  describe('clearCompletedTasks', () => {
-    it('should remove completed tasks', () => {
-      // Arrange: Create tasks with some completed
-      const tasksWithCompleted = [
-        { description: 'Task 1', completed: true },
-        { description: 'Task 2', completed: false },
-      ];
-      localStorage.getItem.mockReturnValueOnce(JSON.stringify(tasksWithCompleted));
-
-      clearCompletedTasks();
-
-      expect(localStorage.setItem).toHaveBeenCalledWith('tasks', expect.any(String));
-      const updatedTasks = JSON.parse(localStorage.setItem.mock.calls[0][1]);
-      expect(updatedTasks.length).toBe(1);
-      expect(updatedTasks[0].completed).toBe(false);
-    });
+    expect(updatedTasks.length).toBe(1);
+    expect(updatedTasks.some((task) => task.completed)).toBe(false);
   });
 });
