@@ -1,5 +1,3 @@
-// src/index.js
-
 import './style.css';
 
 // Initialize tasks from localStorage or as an empty array if not available
@@ -20,6 +18,8 @@ const updateTaskIndexes = () => {
 // Function to render tasks to the HTML list
 const renderTasks = () => {
   const todoList = document.getElementById('todo-list');
+  if (!todoList) return;
+
   todoList.innerHTML = ''; // Clear the list before rendering
 
   // Sort tasks by index
@@ -126,16 +126,20 @@ const addTask = (description) => {
 
 // Function to edit a task's description
 const editTaskDescription = (index, newDescription) => {
-  tasks[index].description = newDescription;
-  saveTasks();
-  renderTasks();
+  if (tasks[index]) {
+    tasks[index].description = newDescription;
+    saveTasks();
+    renderTasks();
+  }
 };
 
 // Function to update a task's completed status
 const updateTaskStatus = (index, status) => {
-  tasks[index].completed = status;
-  saveTasks();
-  renderTasks();
+  if (tasks[index]) {
+    tasks[index].completed = status;
+    saveTasks();
+    renderTasks();
+  }
 };
 
 // Function to clear all completed tasks
@@ -146,11 +150,24 @@ const clearCompletedTasks = () => {
   renderTasks();
 };
 
-// Export the functions
-export {
-  addTask,
-  editTaskDescription,
-  updateTaskStatus,
-  clearCompletedTasks,
-  renderTasks,
-};
+// Export functions for testing
+export { addTask, editTaskDescription, updateTaskStatus, clearCompletedTasks, renderTasks };
+
+// Initial render of tasks
+document.addEventListener('DOMContentLoaded', () => {
+  renderTasks();
+
+  const taskForm = document.getElementById('task-form');
+  taskForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const taskInput = document.getElementById('task-input');
+    const description = taskInput.value.trim();
+    if (description) {
+      addTask(description);
+      taskInput.value = '';
+    }
+  });
+
+  const clearCompletedButton = document.getElementById('clear-completed');
+  clearCompletedButton.addEventListener('click', clearCompletedTasks);
+});
