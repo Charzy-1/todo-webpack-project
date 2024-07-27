@@ -151,7 +151,9 @@ const clearCompletedTasks = () => {
 };
 
 // Export functions for testing
-export { addTask, editTaskDescription, updateTaskStatus, clearCompletedTasks, renderTasks };
+export {
+  addTask, editTaskDescription, updateTaskStatus, clearCompletedTasks, renderTasks,
+};
 
 // Initial render of tasks
 document.addEventListener('DOMContentLoaded', () => {
